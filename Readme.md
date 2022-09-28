@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Артём Якимов](https://up.htmlacademy.ru/javascript/27/user/1159469).
-* Наставник: `Неизвестно`.
+* Наставник: [Roman Zheltov](https://htmlacademy.ru/profile/id1145037).
 
 ---
 
