@@ -1,10 +1,6 @@
 const getRandom = (min, max) => {
-  if (min < 0 || max < 0) {
+  if (min < 0 || max < 0 || min > max) {
     return NaN;
-  }
-
-  if (min > max) {
-    return Math.round(Math.random() * (min - max) + max);
   }
   return Math.round(Math.random() * (max - min) + min);
 };
