@@ -1,12 +1,16 @@
-const getRandom = (min, max) => {
-  if (min < 0 || max < 0 || min > max) {
+const getRandomPositiveInteger = (min, max) => {
+  if (min < 0 || max < 0) {
     return NaN;
   }
-  return Math.round(Math.random() * (max - min) + min);
+  const lower = Math.ceil(Math.min(min, max));
+  const upper = Math.floor(Math.max(min, max));
+
+  return Math.floor(Math.random() * (upper - lower + 1) + lower);
 };
 
-getRandom(1, 10);
 
-const isValidLength = (newComment, maxLength) => newComment.length <= maxLength;
+getRandomPositiveInteger(1, 10);
 
-isValidLength('Всем привет!', 12);
+const checkCommentLength = (newComment, maxLength) => newComment.length <= maxLength;
+
+checkCommentLength('Всем привет!', 12);
