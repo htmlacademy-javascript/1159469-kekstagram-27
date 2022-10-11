@@ -101,3 +101,9 @@ const createPublishedPhoto = () => {
 };
 
 const similarPhotos = Array.from({length: PHOTOS_COUNT}, createPublishedPhoto);
+
+function testFunction(data) {
+  return data;
+}
+
+testFunction(similarPhotos);
