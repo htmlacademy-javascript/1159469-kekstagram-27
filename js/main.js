@@ -13,6 +13,11 @@ const checkCommentLength = (newComment, maxLength) => newComment.length <= maxLe
 checkCommentLength('Всем привет!', 15);
 
 const PHOTOS_COUNT = 25;
+const AVATARS_COUNT = 6;
+const LIKES_COUNT = {
+  MIN: 15,
+  MAX: 200
+};
 
 const NAMES = [
   'Артём',
@@ -61,46 +66,33 @@ const DESCRIPTION = [
   'Откровенное'
 ];
 
-const photosId = Array.from({length: PHOTOS_COUNT}, (v, i) => i + 1);
-const photosUrl = Array.from({length: PHOTOS_COUNT}, (v, i) => i + 1);
-const commentsId = [];
-
-const getPhotoData = (data) => {
-  const index = getRandomPositiveInteger(0, data.length - 1);
-  const result = data[index];
-  data.splice(index, 1);
-  return result;
-};
-
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
-const createComment = () => {
-  let commentId = getRandomPositiveInteger(1, 99999);
-  while (commentsId.includes(commentId)) {
-    commentId = getRandomPositiveInteger(1, 99999);
-  }
-  commentsId.push(commentId);
-  return {
-    id: commentsId[commentsId.length - 1],
-    avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
-    message: getRandomArrayElement(COMMENTS),
-    name: getRandomArrayElement(NAMES)
-  };
+const createMessage = () => {
+  const result = Array.from({length: getRandomPositiveInteger(1, 2)}, () => getRandomArrayElement(COMMENTS));
+  return result.join(' ');
 };
 
-const createPublishedPhoto = () => {
+const createComment = (index) => ({
+  id: index,
+  avatar: `img/avatar-${getRandomPositiveInteger(1, AVATARS_COUNT)}.svg`,
+  message: createMessage(),
+  name: getRandomArrayElement(NAMES)
+});
+
+const createPublishedPhoto = (index) => {
   const COMMENTS_COUNT = getRandomPositiveInteger(1, 10);
-  const similarComments = Array.from({length: COMMENTS_COUNT}, createComment);
+  const similarComments = Array.from({length: COMMENTS_COUNT}, (_, commentID) => createComment(commentID + 1));
   return {
-    id: getPhotoData(photosId),
-    url: `photos/${getPhotoData(photosUrl)}.jpg`,
+    id: index,
+    url: `photos/${index}.jpg`,
     description: `${getRandomArrayElement(DESCRIPTION)} фото.`,
-    likes: getRandomPositiveInteger(15, 200),
+    likes: getRandomPositiveInteger(LIKES_COUNT.MIN, LIKES_COUNT.MAX),
     comments: similarComments
   };
 };
 
-const similarPhotos = Array.from({length: PHOTOS_COUNT}, createPublishedPhoto);
+const similarPhotos = Array.from({length: PHOTOS_COUNT}, (_, photoID) => createPublishedPhoto(photoID + 1));
 
 function testFunction(data) {
   return data;
