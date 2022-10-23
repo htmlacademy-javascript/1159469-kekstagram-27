@@ -1,4 +1,3 @@
-import {createPhotos} from './data.js';
+import {renderOtherUsersPhoto} from './render-thumbnails.js';
 
-createPhotos();
-
+renderOtherUsersPhoto();
