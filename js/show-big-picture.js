@@ -1,4 +1,3 @@
-
 const modalBigPicture = document.querySelector('.big-picture');
 const otherUsersPhotos = document.querySelectorAll('.picture');
 const closeButton = modalBigPicture.querySelector('.big-picture__cancel');
