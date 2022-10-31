@@ -8,7 +8,7 @@ const similarPhotos = createPhotos();
 const similarFragment = document.createDocumentFragment();
 
 const renderOtherUsersPhoto = () => {
-  similarPhotos.forEach(({url, comments, likes}) => {
+  similarPhotos.forEach(({ url, comments, likes }) => {
     const photoElement = similarPhotoTemplate.cloneNode(true);
     photoElement.querySelector('.picture__img').src = url;
     photoElement.querySelector('.picture__comments').textContent = comments.length;
@@ -18,6 +18,6 @@ const renderOtherUsersPhoto = () => {
   picturesContainer.append(similarFragment);
 };
 
-export {renderOtherUsersPhoto};
+export {renderOtherUsersPhoto, similarPhotos};
 
 
