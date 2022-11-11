@@ -14,7 +14,7 @@ const createComment = (index) => ({
 });
 
 const createPublishedPhoto = (index) => {
-  const COMMENTS_COUNT = getRandomPositiveInteger(1, 10);
+  const COMMENTS_COUNT = getRandomPositiveInteger(1, 16);
   const similarComments = Array.from({length: COMMENTS_COUNT}, (_, commentID) => createComment(commentID + 1));
   return {
     id: index,
