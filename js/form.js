@@ -123,4 +123,30 @@ editForm.addEventListener('submit', (evt) => {
   pristine.validate();
 });
 
+const zoomOutButton = document.querySelector('.scale__control--smaller');
+const zoomInButton = document.querySelector('.scale__control--bigger');
+const zoomInputElement = document.querySelector('.scale__control--value');
+const imgPrewiew = document.querySelector('.img-upload__preview img');
+const ZOOM_STEP = 25;
+let zoomValue = +zoomInputElement.value.slice(0, -1);
 
+// console.log(zoomValue);
+
+function decreaseScaleHandler() {
+  if (zoomValue > 25) {
+    zoomValue -= ZOOM_STEP;
+    zoomInputElement.value = `${zoomValue}%`;
+    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
+  }
+}
+
+function increaseScaleHandler() {
+  if (zoomValue < 100) {
+    zoomValue += ZOOM_STEP;
+    zoomInputElement.value = `${zoomValue}%`;
+    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
+  }
+}
+
+zoomOutButton.addEventListener('click', decreaseScaleHandler);
+zoomInButton.addEventListener('click', increaseScaleHandler);
