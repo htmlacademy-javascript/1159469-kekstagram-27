@@ -10,7 +10,7 @@ const imgPrewiew = document.querySelector('.img-upload__preview img');
 const effectsListElement = document.querySelector('.effects__list');
 const depthFilterSlider = document.querySelector('.effect-level__slider');
 const effectValueElement = document.querySelector('.effect-level__value');
-const sliderContainerElement = document.querySelector('.img-upload__effect-level');
+export const sliderContainerElement = document.querySelector('.img-upload__effect-level');
 
 const defaultConfigSlider = {
   range: {min: 0, max: 100},
@@ -53,6 +53,7 @@ const sliderHandler = (filterName) => {
       break;
     default:
       imgPrewiew.style.filter = null;
+      break;
   }
 };
 
@@ -100,7 +101,7 @@ effectsListElement.addEventListener('change', (evt) => {
       });
       sliderContainerElement.classList.remove('visually-hidden');
       break;
-    default:
+    case 'none':
       depthFilterSlider.noUiSlider.updateOptions({
         range: {min: 0, max: 100},
         start: 100,
@@ -110,5 +111,4 @@ effectsListElement.addEventListener('change', (evt) => {
       break;
   }
 });
-
 
