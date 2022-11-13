@@ -130,8 +130,6 @@ const imgPrewiew = document.querySelector('.img-upload__preview img');
 const ZOOM_STEP = 25;
 let zoomValue = +zoomInputElement.value.slice(0, -1);
 
-// console.log(zoomValue);
-
 function decreaseScaleHandler() {
   if (zoomValue > 25) {
     zoomValue -= ZOOM_STEP;
