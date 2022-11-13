@@ -12,14 +12,6 @@ const depthFilterSlider = document.querySelector('.effect-level__slider');
 const effectValueElement = document.querySelector('.effect-level__value');
 const sliderContainerElement = document.querySelector('.img-upload__effect-level');
 
-const onRadioFilterChange = (evt) => {
-  imgPrewiew.className = FILTER_CLASSES[evt.target.value];
-};
-
-effectsListElement.addEventListener('change', onRadioFilterChange);
-
-sliderContainerElement.classList.add('visually-hidden');
-
 const defaultConfigSlider = {
   range: {min: 0, max: 100},
   start: 100,
@@ -65,6 +57,7 @@ const sliderHandler = (filterName) => {
 };
 
 effectsListElement.addEventListener('change', (evt) => {
+  imgPrewiew.className = FILTER_CLASSES[evt.target.value];
   depthFilterSlider.noUiSlider.on('update', () => sliderHandler(evt.target.value));
   switch(evt.target.value) {
     case 'chrome':
@@ -107,7 +100,7 @@ effectsListElement.addEventListener('change', (evt) => {
       });
       sliderContainerElement.classList.remove('visually-hidden');
       break;
-    case 'none':
+    default:
       depthFilterSlider.noUiSlider.updateOptions({
         range: {min: 0, max: 100},
         start: 100,

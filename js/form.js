@@ -22,6 +22,7 @@ function closeForm() {
   uploadFileControl.value = null;
   closeFormButton.removeEventListener('click', closeForm);
   document.removeEventListener('keydown', closeEditFormByEsc);
+  editForm.reset();
 }
 
 function closeEditFormByEsc(evt) {
