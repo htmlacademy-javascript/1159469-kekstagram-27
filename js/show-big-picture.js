@@ -1,4 +1,3 @@
-
 const showBigPicture = (similarPhotos) => {
   const COUNT = 5;
   let userPhoto;

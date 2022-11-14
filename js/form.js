@@ -1,3 +1,5 @@
+import { sliderContainerElement } from './slider.js';
+
 const uploadFileControl = document.querySelector('#upload-file');
 const imageEditForm = document.querySelector('.img-upload__overlay');
 const closeFormButton = document.querySelector('#upload-cancel');
@@ -8,6 +10,12 @@ const formInputs = document.querySelectorAll('.img-upload__field-wrapper');
 const VALID_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
 const VALID_DIVIDE_HASHTAGS = /(#[a-zа-яё0-9]{1,19}){2}/i;
 const MAX_HASHTAG_COUNT = 5;
+const zoomOutButton = document.querySelector('.scale__control--smaller');
+const zoomInButton = document.querySelector('.scale__control--bigger');
+const zoomInputElement = document.querySelector('.scale__control--value');
+const imgPrewiew = document.querySelector('.img-upload__preview img');
+const ZOOM_STEP = 25;
+let zoomValue = +zoomInputElement.value.slice(0, -1);
 
 const openEditForm = () => {
   imageEditForm.classList.remove('hidden');
@@ -20,8 +28,14 @@ function closeForm() {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadFileControl.value = null;
+  imgPrewiew.className = null;
+  imgPrewiew.style.filter = null;
+  editForm.reset();
+  sliderContainerElement.classList.add('visually-hidden');
   closeFormButton.removeEventListener('click', closeForm);
   document.removeEventListener('keydown', closeEditFormByEsc);
+  zoomOutButton.removeEventListener('click', decreaseScaleHandler);
+  zoomInButton.removeEventListener('click', increaseScaleHandler);
 }
 
 function closeEditFormByEsc(evt) {
@@ -123,4 +137,21 @@ editForm.addEventListener('submit', (evt) => {
   pristine.validate();
 });
 
+function decreaseScaleHandler() {
+  if (zoomValue > 25) {
+    zoomValue -= ZOOM_STEP;
+    zoomInputElement.value = `${zoomValue}%`;
+    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
+  }
+}
 
+function increaseScaleHandler() {
+  if (zoomValue < 100) {
+    zoomValue += ZOOM_STEP;
+    zoomInputElement.value = `${zoomValue}%`;
+    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
+  }
+}
+
+zoomOutButton.addEventListener('click', decreaseScaleHandler);
+zoomInButton.addEventListener('click', increaseScaleHandler);
