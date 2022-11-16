@@ -1,4 +1,6 @@
 import { sliderContainerElement } from './slider.js';
+import { sendData } from './api.js';
+import { showAlert } from './utils.js';
 
 const uploadFileControl = document.querySelector('#upload-file');
 const imageEditForm = document.querySelector('.img-upload__overlay');
@@ -110,8 +112,8 @@ const pristine = new Pristine(editForm, pristineConfig, true);
 
 pristine.addValidator(
   hashtagInput,
-  validateHashtagsCount,
-  'Недопустимое количество хэштегов'
+  checkSpaceBetweenTags,
+  'Хэштеги должны разделяться пробелами'
 );
 
 pristine.addValidator(
@@ -128,13 +130,19 @@ pristine.addValidator(
 
 pristine.addValidator(
   hashtagInput,
-  checkSpaceBetweenTags,
-  'Хэштеги должны разделяться пробелами'
+  validateHashtagsCount,
+  'Недопустимое количество хэштегов'
 );
 
 editForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
+  const isValid = pristine.validate();
+  if (isValid) {
+    const formData = new FormData(evt.target);
+    sendData(closeForm, formData);
+  } else {
+    showAlert('Форма невалидна');
+  }
 });
 
 function decreaseScaleHandler() {

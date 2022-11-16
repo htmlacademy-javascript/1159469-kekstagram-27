@@ -1,4 +1,7 @@
+import { renderOtherUsersPhoto } from './render-thumbnails.js';
+
 const showBigPicture = (similarPhotos) => {
+  renderOtherUsersPhoto(similarPhotos);
   const COUNT = 5;
   let userPhoto;
   let currentCount = 0;
