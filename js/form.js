@@ -134,17 +134,6 @@ pristine.addValidator(
   'Недопустимое количество хэштегов'
 );
 
-editForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-  if (isValid) {
-    const formData = new FormData(evt.target);
-    sendData(closeForm, formData);
-  } else {
-    showAlert('Форма невалидна');
-  }
-});
-
 function decreaseScaleHandler() {
   if (zoomValue > 25) {
     zoomValue -= ZOOM_STEP;
@@ -163,3 +152,38 @@ function increaseScaleHandler() {
 
 zoomOutButton.addEventListener('click', decreaseScaleHandler);
 zoomInButton.addEventListener('click', increaseScaleHandler);
+
+const showStatusMessage = (typeMessage) => {
+  const messageTemplate = document.querySelector(`#${typeMessage}`).content.querySelector(`.${typeMessage}`);
+  const messageElement = messageTemplate.cloneNode(true);
+  const closeMessageButton = messageElement.querySelector(`.${typeMessage}__button`);
+  document.body.append(messageElement);
+  closeMessageButton.addEventListener('click', () => messageElement.classList.add('hidden'));
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      messageElement.classList.add('hidden');
+    }
+  });
+  document.addEventListener('click', (evt) => {
+    if (evt.target === messageElement) {
+      messageElement.classList.add('hidden');
+    }
+  });
+};
+
+const onSendDataError = () => showStatusMessage('error');
+const onSendDataSuccess = () => {
+  closeForm();
+  showStatusMessage('success');
+};
+
+editForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if (isValid) {
+    const formData = new FormData(evt.target);
+    sendData(formData, onSendDataSuccess, onSendDataError);
+  } else {
+    showAlert('Форма невалидна');
+  }
+});

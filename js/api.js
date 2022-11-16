@@ -1,55 +1,32 @@
-const showSuccesMessage = () => {
-  const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  const successMessage = successMessageTemplate.cloneNode(true);
-  const closeSuccessButton = successMessage.querySelector('.success__button');
-  document.body.append(successMessage);
-  closeSuccessButton.addEventListener('click', () => hideMesage(successMessage));
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      hideMesage(successMessage);
-    }
-  });
-};
-
-const showErrorMessage = () => {
-  const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-  const errorMessage = errorMessageTemplate.cloneNode(true);
-  const closeErrorButton = errorMessage.querySelector('.error__button');
-  document.body.append(errorMessage);
-  closeErrorButton.addEventListener('click', () => hideMesage(errorMessage));
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      hideMesage(errorMessage);
-    }
-  });
-};
-
-function hideMesage(element) {
-  element.classList.add('hidden');
-}
-
-const getData = (onSuccess) => {
+const getData = (onSuccess, onFail) => {
   fetch('https://27.javascript.pages.academy/kekstagram/data')
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибка загрузки данных, попробуйте перезагрузить страницу');
+      }
+      return response.json();
+    })
     .then((data) => {
       onSuccess(data);
+    })
+    .catch((err) => {
+      onFail(err?.message);
     });
 };
 
-const sendData = (onSuccess, form) => {
+const sendData = (data, onSuccess = () => {}, onError = () => {}) => {
   fetch('https://27.javascript.pages.academy/kekstagram1',
     {
       method: 'POST',
-      body: form
+      body: data
     })
     .then((response) => {
-      if (response.ok) {
-        showSuccesMessage();
-        onSuccess();
-      } else {
-        showErrorMessage();
+      if (!response.ok) {
+        throw new Error();
       }
-    });
+      onSuccess();
+    })
+    .catch(onError);
 };
 
 export { getData, sendData };

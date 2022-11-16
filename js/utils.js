@@ -20,8 +20,9 @@ const showAlert = (message) => {
   alertContainer.style.left = '50%';
   alertContainer.style.bottom = '10%';
   alertContainer.style.transform = 'translateX(-50%)';
-  alertContainer.style.padding = '20px 15px';
+  alertContainer.style.padding = '15px 15px';
   alertContainer.style.fontSize = '22px';
+  alertContainer.style.lineHeight = '30px';
   alertContainer.style.textAlign = 'center';
   alertContainer.style.color = '#B22222';
   alertContainer.style.backgroundColor = '#F08080';
