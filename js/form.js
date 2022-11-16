@@ -67,38 +67,38 @@ const getArrayFromTags = (data) => {
   return hashtags;
 };
 
-const disableSubmitButton = (flag) => {
-  if (!flag) {
-    submitFormButton.disabled = true;
-  } else {
-    submitFormButton.disabled = false;
-  }
-};
+// const disableSubmitButton = (flag) => {
+//   if (!flag) {
+//     submitFormButton.disabled = true;
+//   } else {
+//     submitFormButton.disabled = false;
+//   }
+// };
 
 const validateHashtagsCount = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = checkHashtagsCount(tagsArray);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const validateHashtagsUnique = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = isUniqueHashtags(tagsArray);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const validateHashtagSymbols = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = tagsArray.every(isValidHashtag);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const checkSpaceBetweenTags = (hashtagString) => {
   const isValid = !hashtagString.match(VALID_DIVIDE_HASHTAGS);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
@@ -153,34 +153,56 @@ function increaseScaleHandler() {
 zoomOutButton.addEventListener('click', decreaseScaleHandler);
 zoomInButton.addEventListener('click', increaseScaleHandler);
 
+
 const showStatusMessage = (typeMessage) => {
   const messageTemplate = document.querySelector(`#${typeMessage}`).content.querySelector(`.${typeMessage}`);
   const messageElement = messageTemplate.cloneNode(true);
   const closeMessageButton = messageElement.querySelector(`.${typeMessage}__button`);
-  document.body.append(messageElement);
-  closeMessageButton.addEventListener('click', () => messageElement.classList.add('hidden'));
-  document.addEventListener('keydown', (evt) => {
+  const hideMessageByEsc = (evt) => {
+    evt.stopImmediatePropagation();
     if (evt.key === 'Escape') {
       messageElement.classList.add('hidden');
+      document.removeEventListener('keydown', hideMessageByEsc, {capture: true});
     }
-  });
-  document.addEventListener('click', (evt) => {
+  };
+  const hideMessageByClickOutside = (evt) => {
     if (evt.target === messageElement) {
       messageElement.classList.add('hidden');
+      document.removeEventListener('keydown', hideMessageByClickOutside);
     }
-  });
+  };
+  document.body.append(messageElement);
+  closeMessageButton.addEventListener('click', () => messageElement.classList.add('hidden'));
+  document.addEventListener('keydown', hideMessageByEsc, {capture: true});
+  document.addEventListener('click', hideMessageByClickOutside);
 };
 
-const onSendDataError = () => showStatusMessage('error');
+const blockSubmitButton = () => {
+  submitFormButton.disabled = true;
+  submitFormButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitFormButton.disabled = false;
+  submitFormButton.textContent = 'Опубликовать';
+};
+
+const onSendDataError = () => {
+  showStatusMessage('error');
+  unblockSubmitButton();
+};
+
 const onSendDataSuccess = () => {
   closeForm();
   showStatusMessage('success');
+  unblockSubmitButton();
 };
 
 editForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
   if (isValid) {
+    blockSubmitButton();
     const formData = new FormData(evt.target);
     sendData(formData, onSendDataSuccess, onSendDataError);
   } else {
