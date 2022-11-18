@@ -1,4 +1,6 @@
 import { sliderContainerElement } from './slider.js';
+import { sendData } from './api.js';
+import { showAlert } from './utils.js';
 
 const uploadFileControl = document.querySelector('#upload-file');
 const imageEditForm = document.querySelector('.img-upload__overlay');
@@ -65,38 +67,38 @@ const getArrayFromTags = (data) => {
   return hashtags;
 };
 
-const disableSubmitButton = (flag) => {
-  if (!flag) {
-    submitFormButton.disabled = true;
-  } else {
-    submitFormButton.disabled = false;
-  }
-};
+// const disableSubmitButton = (flag) => {
+//   if (!flag) {
+//     submitFormButton.disabled = true;
+//   } else {
+//     submitFormButton.disabled = false;
+//   }
+// };
 
 const validateHashtagsCount = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = checkHashtagsCount(tagsArray);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const validateHashtagsUnique = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = isUniqueHashtags(tagsArray);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const validateHashtagSymbols = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = tagsArray.every(isValidHashtag);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const checkSpaceBetweenTags = (hashtagString) => {
   const isValid = !hashtagString.match(VALID_DIVIDE_HASHTAGS);
-  disableSubmitButton(isValid);
+  // disableSubmitButton(isValid);
   return isValid;
 };
 
@@ -110,8 +112,8 @@ const pristine = new Pristine(editForm, pristineConfig, true);
 
 pristine.addValidator(
   hashtagInput,
-  validateHashtagsCount,
-  'Недопустимое количество хэштегов'
+  checkSpaceBetweenTags,
+  'Хэштеги должны разделяться пробелами'
 );
 
 pristine.addValidator(
@@ -128,14 +130,9 @@ pristine.addValidator(
 
 pristine.addValidator(
   hashtagInput,
-  checkSpaceBetweenTags,
-  'Хэштеги должны разделяться пробелами'
+  validateHashtagsCount,
+  'Недопустимое количество хэштегов'
 );
-
-editForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
 
 function decreaseScaleHandler() {
   if (zoomValue > 25) {
@@ -155,3 +152,60 @@ function increaseScaleHandler() {
 
 zoomOutButton.addEventListener('click', decreaseScaleHandler);
 zoomInButton.addEventListener('click', increaseScaleHandler);
+
+
+const showStatusMessage = (typeMessage) => {
+  const messageTemplate = document.querySelector(`#${typeMessage}`).content.querySelector(`.${typeMessage}`);
+  const messageElement = messageTemplate.cloneNode(true);
+  const closeMessageButton = messageElement.querySelector(`.${typeMessage}__button`);
+  const hideMessageByEsc = (evt) => {
+    evt.stopImmediatePropagation();
+    if (evt.key === 'Escape') {
+      messageElement.classList.add('hidden');
+      document.removeEventListener('keydown', hideMessageByEsc, {capture: true});
+    }
+  };
+  const hideMessageByClickOutside = (evt) => {
+    if (evt.target === messageElement) {
+      messageElement.classList.add('hidden');
+      document.removeEventListener('keydown', hideMessageByClickOutside);
+    }
+  };
+  document.body.append(messageElement);
+  closeMessageButton.addEventListener('click', () => messageElement.classList.add('hidden'));
+  document.addEventListener('keydown', hideMessageByEsc, {capture: true});
+  document.addEventListener('click', hideMessageByClickOutside);
+};
+
+const blockSubmitButton = () => {
+  submitFormButton.disabled = true;
+  submitFormButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitFormButton.disabled = false;
+  submitFormButton.textContent = 'Опубликовать';
+};
+
+const onSendDataError = () => {
+  showStatusMessage('error');
+  unblockSubmitButton();
+};
+
+const onSendDataSuccess = () => {
+  closeForm();
+  showStatusMessage('success');
+  unblockSubmitButton();
+};
+
+editForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+  if (isValid) {
+    blockSubmitButton();
+    const formData = new FormData(evt.target);
+    sendData(formData, onSendDataSuccess, onSendDataError);
+  } else {
+    showAlert('Форма невалидна');
+  }
+});

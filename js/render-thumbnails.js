@@ -1,13 +1,13 @@
-import {createPhotos} from './data.js';
+// import { createPhotos } from './data.js';
 
 const picturesContainer = document.querySelector('.pictures');
 const similarPhotoTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const similarPhotos = createPhotos();
+// const similarPhotos = createPhotos();
 
 const similarFragment = document.createDocumentFragment();
 
-const renderOtherUsersPhoto = () => {
+const renderOtherUsersPhoto = (similarPhotos) => {
   similarPhotos.forEach(({ url, comments, likes, id }) => {
     const photoElement = similarPhotoTemplate.cloneNode(true);
     photoElement.id = id;
@@ -19,6 +19,4 @@ const renderOtherUsersPhoto = () => {
   picturesContainer.append(similarFragment);
 };
 
-export {renderOtherUsersPhoto, similarPhotos};
-
-
+export { renderOtherUsersPhoto };
