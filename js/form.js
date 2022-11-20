@@ -24,6 +24,8 @@ const openEditForm = () => {
   document.body.classList.add('modal-open');
   closeFormButton.addEventListener('click', closeForm);
   document.addEventListener('keydown', closeEditFormByEsc);
+  zoomOutButton.addEventListener('click', decreaseScaleHandler);
+  zoomInButton.addEventListener('click', increaseScaleHandler);
 };
 
 function closeForm() {
@@ -32,6 +34,8 @@ function closeForm() {
   uploadFileControl.value = null;
   imgPrewiew.className = null;
   imgPrewiew.style.filter = null;
+  imgPrewiew.style.transform = 'scale(1)';
+  zoomValue = 100;
   editForm.reset();
   sliderContainerElement.classList.add('visually-hidden');
   closeFormButton.removeEventListener('click', closeForm);
@@ -67,38 +71,26 @@ const getArrayFromTags = (data) => {
   return hashtags;
 };
 
-// const disableSubmitButton = (flag) => {
-//   if (!flag) {
-//     submitFormButton.disabled = true;
-//   } else {
-//     submitFormButton.disabled = false;
-//   }
-// };
-
 const validateHashtagsCount = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = checkHashtagsCount(tagsArray);
-  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const validateHashtagsUnique = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = isUniqueHashtags(tagsArray);
-  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const validateHashtagSymbols = (value) => {
   const tagsArray = getArrayFromTags(value);
   const isValid = tagsArray.every(isValidHashtag);
-  // disableSubmitButton(isValid);
   return isValid;
 };
 
 const checkSpaceBetweenTags = (hashtagString) => {
   const isValid = !hashtagString.match(VALID_DIVIDE_HASHTAGS);
-  // disableSubmitButton(isValid);
   return isValid;
 };
 
@@ -149,10 +141,6 @@ function increaseScaleHandler() {
     imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
   }
 }
-
-zoomOutButton.addEventListener('click', decreaseScaleHandler);
-zoomInButton.addEventListener('click', increaseScaleHandler);
-
 
 const showStatusMessage = (typeMessage) => {
   const messageTemplate = document.querySelector(`#${typeMessage}`).content.querySelector(`.${typeMessage}`);
