@@ -1,10 +1,5 @@
-// import { createPhotos } from './data.js';
-
 const picturesContainer = document.querySelector('.pictures');
 const similarPhotoTemplate = document.querySelector('#picture').content.querySelector('.picture');
-
-// const similarPhotos = createPhotos();
-
 const similarFragment = document.createDocumentFragment();
 
 const renderOtherUsersPhoto = (similarPhotos) => {

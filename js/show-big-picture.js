@@ -1,7 +1,7 @@
 import { renderOtherUsersPhoto } from './render-thumbnails.js';
 
-const showBigPicture = (similarPhotos) => {
-  renderOtherUsersPhoto(similarPhotos);
+const showBigPicture = (similarPhotos, cb) => {
+  renderOtherUsersPhoto(similarPhotos, cb);
   const photoFilters = document.querySelector('.img-filters');
   photoFilters.classList.remove('img-filters--inactive');
   const COUNT = 5;
