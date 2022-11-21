@@ -2,15 +2,20 @@ import './form.js';
 import './filter.js';
 import './upload-preview.js';
 import { showBigPicture } from './show-big-picture.js';
-import { showAlert } from './utils.js';
+import { showAlert, debounce } from './utils.js';
 import { getData } from './api.js';
-// import { debounce } from './utils.js';
-import { setOnFilterClick } from './filter.js';
-// import { renderOtherUsersPhoto } from './render-thumbnails.js';
+import { renderPhotos} from './render-thumbnails.js';
+import {
+  setOnFilterClick,
+  sortDefaultPhotos,
+  sortDiscussedPhotos,
+  sortRandomPhotos
+} from './filter.js';
 
-// const RERENDERED_DELAY = 500;
 getData((data) => {
-  showBigPicture(data);
-  setOnFilterClick(data, showBigPicture);
+  showBigPicture(data, sortDefaultPhotos);
+  setOnFilterClick(debounce(() => renderPhotos(data, sortDiscussedPhotos)), 'discussed');
+  setOnFilterClick(debounce(() => renderPhotos(data, sortRandomPhotos)), 'random');
+  setOnFilterClick(debounce(() => renderPhotos(data, sortDefaultPhotos)), 'default');
 }, showAlert);
 
