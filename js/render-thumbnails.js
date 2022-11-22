@@ -1,14 +1,12 @@
-// import { createPhotos } from './data.js';
-
 const picturesContainer = document.querySelector('.pictures');
 const similarPhotoTemplate = document.querySelector('#picture').content.querySelector('.picture');
-
-// const similarPhotos = createPhotos();
-
 const similarFragment = document.createDocumentFragment();
 
-const renderOtherUsersPhoto = (similarPhotos) => {
-  similarPhotos.forEach(({ url, comments, likes, id }) => {
+export const renderPhotos = (similarPhotos, cb) => {
+  const allUsersPhotos = document.querySelectorAll('.picture');
+  allUsersPhotos.forEach((item) => item.remove());
+  const filteredPhotos = cb(similarPhotos);
+  filteredPhotos.forEach(({ url, comments, likes, id }) => {
     const photoElement = similarPhotoTemplate.cloneNode(true);
     photoElement.id = id;
     photoElement.querySelector('.picture__img').src = url;
@@ -18,5 +16,3 @@ const renderOtherUsersPhoto = (similarPhotos) => {
   });
   picturesContainer.append(similarFragment);
 };
-
-export { renderOtherUsersPhoto };
