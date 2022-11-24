@@ -4,7 +4,6 @@ import './upload-preview.js';
 import { showBigPicture } from './show-big-picture.js';
 import { showAlert, debounce } from './utils.js';
 import { getData } from './api.js';
-import { renderPhotos} from './render-thumbnails.js';
 import {
   setOnFilterClick,
   sortDefaultPhotos,
@@ -14,8 +13,8 @@ import {
 
 getData((data) => {
   showBigPicture(data, sortDefaultPhotos);
-  setOnFilterClick(debounce(() => renderPhotos(data, sortDiscussedPhotos)), 'discussed');
-  setOnFilterClick(debounce(() => renderPhotos(data, sortRandomPhotos)), 'random');
-  setOnFilterClick(debounce(() => renderPhotos(data, sortDefaultPhotos)), 'default');
+  setOnFilterClick(debounce(() => showBigPicture(data, sortDiscussedPhotos)), 'discussed');
+  setOnFilterClick(debounce(() => showBigPicture(data, sortRandomPhotos)), 'random');
+  setOnFilterClick(debounce(() => showBigPicture(data, sortDefaultPhotos)), 'default');
 }, showAlert);
 
