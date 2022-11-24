@@ -32,7 +32,7 @@ const defaultConfigSlider = {
 
 noUiSlider.create(depthFilterSlider, defaultConfigSlider);
 
-const sliderHandler = (filterName) => {
+const handleSliderUpdate = (filterName) => {
   const filterValue = depthFilterSlider.noUiSlider.get();
   effectValueElement.value = filterValue;
   switch (filterName) {
@@ -59,7 +59,7 @@ const sliderHandler = (filterName) => {
 
 effectsListElement.addEventListener('change', (evt) => {
   imgPrewiew.className = FILTER_CLASSES[evt.target.value];
-  depthFilterSlider.noUiSlider.on('update', () => sliderHandler(evt.target.value));
+  depthFilterSlider.noUiSlider.on('update', () => handleSliderUpdate(evt.target.value));
   switch(evt.target.value) {
     case 'chrome':
       depthFilterSlider.noUiSlider.updateOptions({

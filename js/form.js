@@ -64,35 +64,24 @@ const isUniqueHashtags = (items) => {
   return lowerCaseHashtags.length === uniqeHashtags.size;
 };
 
-const getArrayFromTags = (data) => {
-  const hashtags = data
-    .split(' ')
-    .filter((element) => !!element);
-  return hashtags;
-};
+const getArrayFromTags = (data) => data.split(' ').filter((element) => !!element);
 
 const validateHashtagsCount = (value) => {
   const tagsArray = getArrayFromTags(value);
-  const isValid = checkHashtagsCount(tagsArray);
-  return isValid;
+  return checkHashtagsCount(tagsArray);
 };
 
 const validateHashtagsUnique = (value) => {
   const tagsArray = getArrayFromTags(value);
-  const isValid = isUniqueHashtags(tagsArray);
-  return isValid;
+  return isUniqueHashtags(tagsArray);
 };
 
 const validateHashtagSymbols = (value) => {
   const tagsArray = getArrayFromTags(value);
-  const isValid = tagsArray.every(isValidHashtag);
-  return isValid;
+  return tagsArray.every(isValidHashtag);
 };
 
-const checkSpaceBetweenTags = (hashtagString) => {
-  const isValid = !hashtagString.match(VALID_DIVIDE_HASHTAGS);
-  return isValid;
-};
+const checkSpaceBetweenTags = (hashtagString) => !hashtagString.match(VALID_DIVIDE_HASHTAGS);
 
 const pristineConfig = {
   classTo: 'img-upload__field-wrapper',
