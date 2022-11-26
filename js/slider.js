@@ -18,16 +18,9 @@ const defaultConfigSlider = {
   step: 1,
   connect: 'lower',
   format: {
-    to: function (value) {
-      if (Number.isInteger(value)) {
-        return value;
-      }
-      return value.toFixed(1);
-    },
-    from: function (value) {
-      return parseFloat(value).toFixed(1);
-    },
-  },
+    to: (value) => Number.isInteger(value) ? value : value.toFixed(1),
+    from: (value) => parseFloat(value).toFixed(1),
+  }
 };
 
 noUiSlider.create(depthFilterSlider, defaultConfigSlider);

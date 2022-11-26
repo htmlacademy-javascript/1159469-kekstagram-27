@@ -41,24 +41,22 @@ const showBigPicture = (similarPhotos, cb) => {
     userPhoto = null;
   };
 
-  const openBigPicture = () => {
-    const hideModalByClick = () => {
+  const hideModalByEscape = (evt) => {
+    if (evt.key === 'Escape') {
       hideModal();
-      closeButton.removeEventListener('click', hideModalByClick);
-      document.removeEventListener('keydown', hideModalByEscape);
-    };
-    function hideModalByEscape(evt) {
-      if (evt.key === 'Escape') {
-        hideModal();
-      }
-      closeButton.removeEventListener('click', hideModalByClick);
-      document.removeEventListener('keydown', hideModalByEscape);
     }
+  };
+
+  const hideModalByClick = () => {
+    hideModal();
+  };
+
+  const openBigPicture = () => {
     commentsList.innerHTML = ' ';
     modalBigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
-    closeButton.addEventListener('click', hideModalByClick);
-    document.addEventListener('keydown', hideModalByEscape);
+    closeButton.addEventListener('click', hideModalByClick, { once: true });
+    document.addEventListener('keydown', hideModalByEscape, { once: true });
   };
 
   const addPhotoContent = (photo, usersPhotos) => {

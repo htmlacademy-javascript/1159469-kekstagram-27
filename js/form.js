@@ -19,16 +19,23 @@ const imgPrewiew = document.querySelector('.img-upload__preview img');
 const ZOOM_STEP = 25;
 let zoomValue = +zoomInputElement.value.slice(0, -1);
 
-const openEditForm = () => {
-  imageEditForm.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  closeFormButton.addEventListener('click', closeForm);
-  document.addEventListener('keydown', closeEditFormByEsc);
-  zoomOutButton.addEventListener('click', decreaseScaleHandler);
-  zoomInButton.addEventListener('click', increaseScaleHandler);
+const decreaseScaleHandler = () => {
+  if (zoomValue > 25) {
+    zoomValue -= ZOOM_STEP;
+    zoomInputElement.value = `${zoomValue}%`;
+    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
+  }
 };
 
-function closeForm() {
+const increaseScaleHandler = () => {
+  if (zoomValue < 100) {
+    zoomValue += ZOOM_STEP;
+    zoomInputElement.value = `${zoomValue}%`;
+    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
+  }
+};
+
+const closeForm = () => {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadFileControl.value = null;
@@ -39,16 +46,24 @@ function closeForm() {
   editForm.reset();
   sliderContainerElement.classList.add('visually-hidden');
   closeFormButton.removeEventListener('click', closeForm);
-  document.removeEventListener('keydown', closeEditFormByEsc);
   zoomOutButton.removeEventListener('click', decreaseScaleHandler);
   zoomInButton.removeEventListener('click', increaseScaleHandler);
-}
+};
 
-function closeEditFormByEsc(evt) {
+const closeEditFormByEsc = (evt) => {
   if (evt.key === 'Escape') {
     closeForm();
   }
-}
+};
+
+const openEditForm = () => {
+  imageEditForm.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  closeFormButton.addEventListener('click', closeForm);
+  document.addEventListener('keydown', closeEditFormByEsc, { once: true});
+  zoomOutButton.addEventListener('click', decreaseScaleHandler);
+  zoomInButton.addEventListener('click', increaseScaleHandler);
+};
 
 formInputs.forEach((item) => {
   item.addEventListener('keydown', (evt) => { evt.stopPropagation();});
@@ -114,22 +129,6 @@ pristine.addValidator(
   validateHashtagsCount,
   'Недопустимое количество хэштегов'
 );
-
-function decreaseScaleHandler() {
-  if (zoomValue > 25) {
-    zoomValue -= ZOOM_STEP;
-    zoomInputElement.value = `${zoomValue}%`;
-    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
-  }
-}
-
-function increaseScaleHandler() {
-  if (zoomValue < 100) {
-    zoomValue += ZOOM_STEP;
-    zoomInputElement.value = `${zoomValue}%`;
-    imgPrewiew.style.transform = `scale(${zoomValue / 100})`;
-  }
-}
 
 const showStatusMessage = (typeMessage) => {
   const messageTemplate = document.querySelector(`#${typeMessage}`).content.querySelector(`.${typeMessage}`);
